@@ -1,0 +1,26 @@
+# Build and dependencies
+dist
+node_modules
+
+# Lockfiles (do not reformat)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+bun.lockb
+bun.lock
+bun.lock.json
+bun.lock.yaml
+
+# Tooling and config
+.vscode
+.git
+.husky
+.prettierrc
+.prettierignore
+.eslintrc.js
+.eslintignore
+
+# Environment (sensitive / non-source)
+.env
+.env.local
+.env.*.local
