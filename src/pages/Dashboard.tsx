@@ -4,7 +4,6 @@ import { useBoards } from '@/hooks/useBoards';
 
 export function Dashboard() {
   const { boards } = useBoards();
-  console.log(boards);
   if (boards.length === 0) {
     return (
       <div className="app-main">

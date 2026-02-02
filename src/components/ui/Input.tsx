@@ -1,6 +1,5 @@
 import type { InputHTMLAttributes } from 'react';
 
-// Props: label/error optional. rest = native input attrs. Styles in index.css (.input-wrap, .input-label, .input, .input-error, .input-error-text).
 type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   label?: string;
   error?: string;

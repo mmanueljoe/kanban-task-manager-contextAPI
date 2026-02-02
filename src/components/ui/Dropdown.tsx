@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import iconChevronDown from '@assets/icon-chevron-down.svg';
 
-// Options; value = selected; onChange when user picks. Styles in index.css (.dropdown, .dropdown-trigger, .dropdown-list, .dropdown-option).
 type DropdownOption = { value: string; label: string };
 
 type DropdownProps = {

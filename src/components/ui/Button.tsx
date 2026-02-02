@@ -1,6 +1,5 @@
 import type { ButtonHTMLAttributes } from 'react';
 
-// Props: variant/size map to CSS classes in index.css (.btn-primary, .btn-large, etc.).
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   children: React.ReactNode;
   variant?: 'primary' | 'secondary' | 'destructive';

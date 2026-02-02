@@ -1,5 +1,5 @@
 @layer components {
-  /* Button: base + variants (Figma) + sizes */
+  /* Button: base + variants + sizes */
   .btn {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-weight: 700;
@@ -63,7 +63,7 @@
     padding: 8px 16px;
   }
 
-  /* Input: wrap, label, field, error (Figma) */
+  /* Input: wrap, label, field, error */
   .input-wrap {
     display: flex;
     flex-direction: column;
@@ -107,7 +107,7 @@
     color: var(--destructive);
   }
 
-  /* Checkbox: row, box, label (Figma subtask) */
+  /* Checkbox: row, box, label */
   .checkbox {
     display: flex;
     align-items: center;
@@ -161,7 +161,7 @@
     opacity: 0.6;
   }
 
-  /* Dropdown: container, trigger, list, option (Figma) */
+  /* Dropdown: container, trigger, list, option */
   .dropdown {
     position: relative;
   }

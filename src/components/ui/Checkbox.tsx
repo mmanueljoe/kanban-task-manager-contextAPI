@@ -1,7 +1,6 @@
 import type { InputHTMLAttributes } from 'react';
 import iconCheck from '@assets/icon-check.svg';
 
-// Controlled: parent owns checked. Styles in index.css (.checkbox, .checkbox-box, .checkbox-label, etc.).
 type CheckboxProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> & {
   label: string;
   checked: boolean;

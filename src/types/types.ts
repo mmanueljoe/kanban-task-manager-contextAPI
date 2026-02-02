@@ -31,7 +31,6 @@ export type TaskDetailsModalProps = {
   taskTitle: string | null;
 };
 
-// Board domain (matches data.json)
 export type Subtask = {
   title: string;
   isCompleted: boolean;
