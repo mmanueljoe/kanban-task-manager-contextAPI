@@ -1,9 +1,9 @@
 import { useUi } from '@hooks/useUi';
 
 export function LoadingOverlay() {
-  const { isLoading } = useUi();
+  const { state } = useUi();
 
-  if (!isLoading()) return null;
+  if (state.loadingKeys.length === 0) return null;
 
   return (
     <div

@@ -1,5 +1,11 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useCallback, useReducer } from 'react';
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useReducer,
+  useRef,
+} from 'react';
 import type { UiContextType, UiState, UiToast } from '@/types/types';
 import { uiReducer } from '@utils/uiReducer';
 
@@ -10,26 +16,58 @@ const initialState: UiState = {
   toasts: [],
 };
 
+const MIN_LOADING_DURATION_MS = 300;
+
 export function UiProvider({
   children,
 }: {
   children: React.ReactNode;
 }): React.ReactElement {
   const [state, dispatch] = useReducer(uiReducer, initialState);
-
-  const startLoading = useCallback(
-    (key: string) => {
-      dispatch({ type: 'START_LOADING', payload: { key } });
-    },
-    [dispatch]
+  const loadingStartTimesRef = useRef<Map<string, number>>(new Map());
+  const stopTimeoutsRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(
+    new Map()
   );
 
-  const stopLoading = useCallback(
-    (key: string) => {
+  const startLoading = useCallback((key: string) => {
+    // Clear any existing timeout for this key
+    const existingTimeout = stopTimeoutsRef.current.get(key);
+    if (existingTimeout) {
+      clearTimeout(existingTimeout);
+      stopTimeoutsRef.current.delete(key);
+    }
+
+    // Record start time
+    loadingStartTimesRef.current.set(key, Date.now());
+    dispatch({ type: 'START_LOADING', payload: { key } });
+  }, []);
+
+  const stopLoading = useCallback((key: string) => {
+    const startTime = loadingStartTimesRef.current.get(key);
+    const elapsed = startTime ? Date.now() - startTime : 0;
+    const remaining = Math.max(0, MIN_LOADING_DURATION_MS - elapsed);
+
+    // Clear any existing timeout for this key
+    const existingTimeout = stopTimeoutsRef.current.get(key);
+    if (existingTimeout) {
+      clearTimeout(existingTimeout);
+    }
+
+    const doStop = () => {
+      loadingStartTimesRef.current.delete(key);
+      stopTimeoutsRef.current.delete(key);
       dispatch({ type: 'STOP_LOADING', payload: { key } });
-    },
-    [dispatch]
-  );
+    };
+
+    if (remaining > 0) {
+      // Schedule stop after minimum duration
+      const timeout = setTimeout(doStop, remaining);
+      stopTimeoutsRef.current.set(key, timeout);
+    } else {
+      // Minimum duration already met, stop immediately
+      doStop();
+    }
+  }, []);
 
   const showToast = useCallback(
     ({ type, message }: Omit<UiToast, 'id'>) => {
@@ -51,6 +89,20 @@ export function UiProvider({
     },
     [state.loadingKeys]
   );
+
+  // Cleanup timeouts on unmount
+  useEffect(() => {
+    const timeouts = stopTimeoutsRef.current;
+    return () => {
+      timeouts.forEach((timeout) => {
+        clearTimeout(timeout);
+      });
+      // Clear the map after iterating
+      Array.from(timeouts.keys()).forEach((key) => {
+        timeouts.delete(key);
+      });
+    };
+  }, []);
 
   const value: UiContextType = {
     state,
