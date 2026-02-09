@@ -41,13 +41,15 @@ export function BoardView() {
   if (!board) {
     return (
       <div className="app-main app-main-board">
-        <h1 className="heading-xl app-section-title">Board not found</h1>
-        <p className="body-l">This board does not exist or was removed.</p>
-        <Link to="/">
-          <Button variant="primary" size="large">
-            Return to Dashboard
-          </Button>
-        </Link>
+        <div className="app-empty-board">
+          <h1 className="heading-xl app-section-title">Board not found</h1>
+          <p className="body-l">This board does not exist or was removed.</p>
+          <Link to="/">
+            <Button variant="primary" size="large">
+              Return to Dashboard
+            </Button>
+          </Link>
+        </div>
       </div>
     );
   }

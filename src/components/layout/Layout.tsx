@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Outlet, useParams } from 'react-router';
+import { useLocation, useOutlet, useParams } from 'react-router';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Header } from '@components/layout/Header';
 import { Aside } from '@components/layout/Aside';
 import { AddTaskModal } from '@components/modals/AddTaskModal';
@@ -11,6 +12,8 @@ import iconShowSidebar from '@assets/icon-show-sidebar.svg';
 export function Layout() {
   const { boards } = useBoards();
   const { boardId } = useParams<{ boardId?: string }>();
+  const location = useLocation();
+  const outlet = useOutlet();
   const [addTaskOpen, setAddTaskOpen] = useState(false);
   const [editBoardOpen, setEditBoardOpen] = useState(false);
   const [deleteBoardOpen, setDeleteBoardOpen] = useState(false);
@@ -51,7 +54,19 @@ export function Layout() {
           canEditBoard={currentBoard != null}
         />
         <main className="app-layout-main">
-          <Outlet />
+          <AnimatePresence mode="wait" initial={false}>
+            {outlet && (
+              <motion.div
+                key={location.pathname}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.18, ease: 'easeOut' }}
+              >
+                {outlet}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </main>
       </div>
       <AddTaskModal

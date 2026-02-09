@@ -13,11 +13,13 @@ export function Admin() {
 
   return (
     <div className="app-main">
-      <h1 className="heading-xl app-section-title">Admin</h1>
-      <p className="body-l">Logged in as {user?.name ?? '—'}</p>
-      <Button variant="secondary" size="large" onClick={handleLogout}>
-        Log out
-      </Button>
+      <div className="app-stack-4">
+        <h1 className="heading-xl app-section-title">Admin</h1>
+        <p className="body-l">Logged in as {user?.name ?? '—'}</p>
+        <Button variant="secondary" size="large" onClick={handleLogout}>
+          Log out
+        </Button>
+      </div>
     </div>
   );
 }

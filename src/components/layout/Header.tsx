@@ -1,7 +1,8 @@
-import { Link, useParams } from 'react-router';
+import { Link, useNavigate, useParams } from 'react-router';
 import { useRef, useState, useEffect } from 'react';
 import { useTheme } from '@hooks/useTheme';
 import { useBoards } from '@/hooks/useBoards';
+import { useAuth } from '@hooks/useAuth';
 import logoMobile from '@assets/logo-mobile.svg';
 import iconChevronDown from '@assets/icon-chevron-down.svg';
 import iconAddTask from '@assets/icon-add-task-mobile.svg';
@@ -26,10 +27,14 @@ export function Header({
   const { boards } = useBoards();
   const { boardId } = useParams<{ boardId?: string }>();
   const { theme, setTheme } = useTheme();
+  const { user, isLoggedIn, logout } = useAuth();
+  const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -42,6 +47,20 @@ export function Header({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [menuOpen]);
 
+  useEffect(() => {
+    if (!userMenuOpen) return;
+    function handleClickOutside(e: MouseEvent) {
+      if (
+        userMenuRef.current &&
+        !userMenuRef.current.contains(e.target as Node)
+      ) {
+        setUserMenuOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [userMenuOpen]);
+
   const currentIndex =
     boardId != null && /^\d+$/.test(boardId) ? parseInt(boardId, 10) : null;
   const currentBoardName =
@@ -51,6 +70,26 @@ export function Header({
     currentIndex < boards.length
       ? boards[currentIndex].name
       : 'Boards';
+
+  const userInitials =
+    user?.name
+      ?.trim()
+      .split(/\s+/)
+      .map((part) => part[0]?.toUpperCase())
+      .filter(Boolean)
+      .slice(0, 2)
+      .join('') || 'AD';
+
+  function handleGoToAdmin() {
+    setUserMenuOpen(false);
+    void navigate('/admin');
+  }
+
+  function handleLogout() {
+    logout();
+    setUserMenuOpen(false);
+    void navigate('/login', { replace: true });
+  }
 
   useEffect(() => {
     if (!dropdownOpen) return;
@@ -198,6 +237,66 @@ export function Header({
           />
           <span className="app-header-add-label">+ Add New Task</span>
         </button>
+        {isLoggedIn && (
+          <div ref={userMenuRef} style={{ position: 'relative' }}>
+            <button
+              type="button"
+              className="app-header-user-button"
+              aria-label="Open admin and account menu"
+              aria-haspopup="true"
+              aria-expanded={userMenuOpen}
+              onClick={() => setUserMenuOpen((o) => !o)}
+            >
+              <span aria-hidden>{userInitials}</span>
+            </button>
+            {userMenuOpen && (
+              <div
+                role="menu"
+                style={{
+                  position: 'absolute',
+                  top: '100%',
+                  right: 0,
+                  marginTop: 8,
+                  minWidth: 192,
+                  padding: 8,
+                  borderRadius: 8,
+                  background: 'var(--bg-main)',
+                  border: '1px solid var(--lines)',
+                  boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
+                  zIndex: 20,
+                }}
+              >
+                <button
+                  type="button"
+                  role="menuitem"
+                  className="dropdown-option"
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    textAlign: 'left',
+                  }}
+                  onClick={handleGoToAdmin}
+                >
+                  Go to Admin
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  className="dropdown-option"
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    textAlign: 'left',
+                    color: 'var(--destructive)',
+                  }}
+                  onClick={handleLogout}
+                >
+                  Log out
+                </button>
+              </div>
+            )}
+          </div>
+        )}
         <div ref={menuRef} style={{ position: 'relative' }}>
           <button
             type="button"

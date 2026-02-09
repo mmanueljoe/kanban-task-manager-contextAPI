@@ -84,6 +84,14 @@
   .app-main > * + * {
     margin-top: 3rem;
   }
+  .app-main-center {
+    min-height: calc(100vh - 56px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
   .app-section-title {
     margin-bottom: 24px;
   }
@@ -375,5 +383,34 @@
     .app-header-add-label {
       display: inline;
     }
+  }
+  .app-header-user-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 9999px;
+    border: 1px solid var(--lines);
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 1;
+    cursor: pointer;
+    transition:
+      background-color 0.15s,
+      border-color 0.15s,
+      color 0.15s;
+  }
+  .app-header-user-button:hover {
+    background-color: var(--secondary-bg);
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+  .app-header-user-button:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
   }
 }

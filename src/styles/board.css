@@ -141,8 +141,12 @@
   }
   .app-empty-board {
     text-align: center;
-    padding: 48px 24px;
+    padding: 64px 24px;
     color: var(--text-muted);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
   .app-empty-board .heading-l {
     margin-bottom: 24px;
@@ -150,7 +154,7 @@
   }
   .app-empty-board .body-l {
     margin-bottom: 24px;
-    max-width: 400px;
+    max-width: 420px;
     margin-left: auto;
     margin-right: auto;
   }

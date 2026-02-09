@@ -45,4 +45,12 @@
     font-size: 12px;
     line-height: 19px;
   }
+
+  .app-404-code {
+    font-size: 56px;
+    line-height: 1.1;
+    letter-spacing: 6px;
+    text-align: center;
+    color: var(--primary);
+  }
 }
